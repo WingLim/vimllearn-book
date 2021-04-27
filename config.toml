@@ -1,3 +1,4 @@
 languageCode = "zh-cn"
 title = "VimL 语言编程指北路"
 theme = "book"
+defaultContentLanguage = "zh"
