@@ -1,3 +1,6 @@
+---
+title: 简介
+---
 # VimL 语言编程指北路
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5ec08893-b40a-4a31-89bd-d9f3dd81e3d6/deploy-status)](https://app.netlify.com/sites/vimllearn-book/deploys)
