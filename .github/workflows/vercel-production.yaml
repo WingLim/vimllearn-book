@@ -1,0 +1,53 @@
+name: vercel-production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  vercel-production:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+          submodules: recursive
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v0.4.3
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: Production
+
+    - name: Install Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+          hugo-version: '0.82.1'
+
+    - name: Build
+      run: hugo -v --minify
+
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v20
+      id: vercel-action
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        github-comment: false
+        vercel-args: '--prod'
+        working-directory: public
+
+    - name: Update Deployment Status
+      uses: bobheadxi/deployments@v0.4.3
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+        env_url: ${{ steps.vercel-action.outputs.preview-url }}
